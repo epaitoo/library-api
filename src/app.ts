@@ -6,10 +6,13 @@ import * as dotenv from "dotenv";
 import mongoose from "mongoose";
 
 import { WelcomeRoute } from "./routes/welcome.route";
+import { BookRoute } from "./routes/book.route";
+import { BookController } from "./controllers/book.controller";
 
 class App {
   public app: express.Application;
   public mongoUrl: string = "mongodb://localhost:27017/library";
+  private welcomeRoute: WelcomeRoute;
 
   constructor() {
     this.app = express();
@@ -42,11 +45,21 @@ class App {
         useUnifiedTopology: true,
         useFindAndModify: false
     });
+    mongoose.set("toJSON", {
+      virtuals: true,
+      transform: (_: any, converted: any) => {
+        delete converted._id;
+      },
+    })
   }
 
   private setRoutes(): void {
-    const welcomeRoute = new WelcomeRoute();
-    this.app.use("/", welcomeRoute.router);
+    const bookRoute = new BookRoute(new BookController());
+
+    // Welcome Route
+    this.app.use("/", this.welcomeRoute.router);
+    // Book Route
+    this.app.use("/api/books", bookRoute.router);
   }
 }
 
