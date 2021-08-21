@@ -8,11 +8,11 @@ import mongoose from "mongoose";
 import { WelcomeRoute } from "./routes/welcome.route";
 import { BookRoute } from "./routes/book.route";
 import { BookController } from "./controllers/book.controller";
+import { BookService } from "./services/book.service";
 
 class App {
   public app: express.Application;
   public mongoUrl: string = "mongodb://localhost:27017/library";
-  private welcomeRoute: WelcomeRoute;
 
   constructor() {
     this.app = express();
@@ -54,10 +54,12 @@ class App {
   }
 
   private setRoutes(): void {
-    const bookRoute = new BookRoute(new BookController());
+    const welcome = new WelcomeRoute();
+    const bookService: BookService = new BookService();
+    const bookRoute = new BookRoute(new BookController(bookService));
 
     // Welcome Route
-    this.app.use("/", this.welcomeRoute.router);
+    this.app.use("/", welcome.router);
     // Book Route
     this.app.use("/api/books", bookRoute.router);
   }

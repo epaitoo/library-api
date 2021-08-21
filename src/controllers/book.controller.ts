@@ -4,8 +4,8 @@ import { Request, Response } from "express";
 
 export class BookController {
 
-    
-    private bookService: BookService
+
+    constructor(private bookService: BookService) {}
 
     // Get All Books
     public getAllBooks = async (_:Request, res: Response) => {
@@ -16,6 +16,20 @@ export class BookController {
             res.status(500).send(e.message);
         }
     }
+
+    // Add A booK
+    public createBook = async(req:Request, res: Response) => {
+        try {
+            const newBook = await this.bookService.addBook(req.body);
+            res.status(201).json({
+                message: "Book Added Successfully",
+                book: newBook
+            })
+        } catch (e: any) {
+            res.status(500).send(e.message);
+        }
+    }
+
 
 
     // Get A Book
