@@ -22,7 +22,7 @@ export class UserService {
 
     // Get User By Email
     public async findUserByEmail(email: string): Promise<IUser> {
-        const user = await User.findOne({ email }).exec();
+        const user = await User.findOne({ email }).select('+password').exec();
 
         if (!user) {
             throw new Error(`User with Email: '${email}' not found`);

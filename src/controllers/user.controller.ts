@@ -31,7 +31,11 @@ export class UserController {
           .then((newUser) => {
             return res.status(201).json({
               message: "New User Added Successfully",
-              user: newUser,
+              user: {
+                "fullName" : newUser.fullName,
+                "email": newUser.email,
+                "id": newUser.id
+              }
             });
           })
           .catch((error) => {
@@ -61,7 +65,7 @@ export class UserController {
       const user = await this.userService.findUserByEmail(email);
 
       if (user) {
-        bcryptjs.compare(req.body.password, user.password, (error, result) => {
+        bcryptjs.compare(password, user.password, (error, result) => {
           if (error) {
             return res.status(401).json({
               message: "Password Mismatch",
@@ -78,7 +82,11 @@ export class UserController {
                 return res.status(200).json({
                   message: "Login Successful",
                   token,
-                  user,
+                  user: {
+                    "fullName" : user.fullName,
+                    "email": user.email,
+                    "id": user.id
+                  }
                 });
               }
             });

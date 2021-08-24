@@ -5,7 +5,7 @@ const UserSchema = new Schema<IUser>(
   {
     fullName: { type: String, required: [true, "Field is required"] },
     email: { type: String, required: [true, "Field is required"], match: /.+\@.+\..+/, unique: true },
-    password: { type: String, required: [true, "Field is required"] },
+    password: { type: String, required: [true, "Field is required"], select: false },
   }, // Customizing the versionKey
   { versionKey: "customVersionKey" }
 );
