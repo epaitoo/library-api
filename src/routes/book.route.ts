@@ -15,8 +15,8 @@ export class BookRoute {
       .post(this.bookController.createBook);
     this.router
       .route("/:id")
-      .get(this.bookController.getABook)
-      .put(this.bookController.updateABook)
-      .delete(this.bookController.deleteABook);
+      .get(this.bookController.getBook)
+      .put(this.bookController.updateBook)
+      .delete(this.bookController.deleteBook);
   }
 }

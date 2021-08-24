@@ -7,8 +7,11 @@ import mongoose from "mongoose";
 
 import { WelcomeRoute } from "./routes/welcome.route";
 import { BookRoute } from "./routes/book.route";
+import { UserRoute } from "./routes/user.route";
 import { BookController } from "./controllers/book.controller";
+import { UserController } from "./controllers/user.controller";
 import { BookService } from "./services/book.service";
+import { UserService } from "./services/user.service";
 
 class App {
   public app: express.Application;
@@ -43,7 +46,8 @@ class App {
     mongoose.connect(this.mongoUrl, { 
         useNewUrlParser: true, 
         useUnifiedTopology: true,
-        useFindAndModify: false
+        useFindAndModify: false,
+        useCreateIndex: true
     });
     mongoose.set("toJSON", {
       virtuals: true,
@@ -56,12 +60,17 @@ class App {
   private setRoutes(): void {
     const welcome = new WelcomeRoute();
     const bookService: BookService = new BookService();
+    const userService: UserService = new UserService();
+
+    const userRoute = new UserRoute(new UserController(userService));
     const bookRoute = new BookRoute(new BookController(bookService));
 
     // Welcome Route
     this.app.use("/", welcome.router);
     // Book Route
     this.app.use("/api/books", bookRoute.router);
+    // User Route
+    this.app.use("/api/users", userRoute.router);
   }
 }
 
