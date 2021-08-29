@@ -1,14 +1,13 @@
 version: "3.8"
 
-services: 
+services:
   db:
     container_name: mongoDB
     image: mongo:latest
     restart: always
-    volumes: 
+    volumes:
       - ./libraryData:/data/db
-    environment: 
+    environment:
       - MONGO_INITDB_DATABASE= library
-    ports: 
+    ports:
       - 27017:27017
-
